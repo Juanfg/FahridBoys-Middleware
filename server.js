@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const port = process.env.PORT || 8081;
 const app = express();
 
+const tService = require("./services/TwitterService.js");
+
 app.set('port', port);
 
 app.use(bodyParser.json());
@@ -20,10 +22,12 @@ load('models/schema.js')
 
 var sequelize = app.models.schema.sequelize;
 
-sequelize.sync().done(function() {
-    app.listen(port, function() {
+sequelize.sync().done(function () {
+    app.listen(port, function () {
         console.log("Listening on port %s", port);
     })
-})
+});
+
+var tServiceInstance = new tService();
 
 module.exports = app;
