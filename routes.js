@@ -1,9 +1,9 @@
 module.exports = function(app) {
-    let tweetCtrl = app.controllers.TweetController;
+    let tweetsCtrl = app.controllers.TweetsController;
 
-    app.get('/api/tweets', tweetCtrl.index);
+    app.get('/api/tweets', tweetsCtrl.index);
 
     app.get('*', function(req, res) {
-        res.json({ message: 'FahridBoys Misddleware' });
+        res.json({ message: 'FahridBoys Middleware' });
     });
 };

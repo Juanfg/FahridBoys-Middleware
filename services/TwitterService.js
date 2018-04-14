@@ -1,7 +1,8 @@
 const Axios = require('axios');
 const querystring = require('querystring');
-var TwitterStream = require('twitter-stream-api'),
-    fs = require('fs');
+const TwitterStream = require('twitter-stream-api');
+const fs = require('fs');
+const TweetsController = require('../controllers/TweetController')
 
 module.exports = function () {
     var keys = {
@@ -32,10 +33,20 @@ module.exports = function () {
         Axios.post("http://localhost:8080/tweets", 
         querystring.stringify({ text: data })).then(function (response) {
             console.log(response.data);
+            if (response.data.isTweet) {
+                let newTweet = {
+                    // Change response.data.lat && response.data.lng
+                    lat: response.data.lat || null,
+                    lng: response.data.lng || null,
+                    userName: response.data.user.screen_name || null,
+                    text: response.data.text || null
+                };
+                TweetsController.create(newTweet);
+            }
         }).catch(function (error) {
             console.log(error);
         });
     });
 
-    Twitter.pipe(fs.createWriteStream('tweets.json'));
+    // Twitter.pipe(fs.createWriteStream('tweets.json'));
 };
