@@ -1,22 +1,19 @@
-const winston = require('winston');
+const Sequelize = require('sequelize');
 
 module.exports = function(app) {
-    let TweetSchema = app.models.tweet;
+    var Tweet = app.models.schema.tweet;
 
-    let TweetController = {
-        index: function(req, res, next) {
-            console.log('hoa');
-            TweetSchema.find({}, function (err, tweets) {
-                if (err) {
-                    console.log('jfklds');
-                    return winston.error(err);
-                }
-                console.log('jfklds');
-
+    var TweetsController = {
+        index: function(req, res) {
+            Tweet.findAll({})
+            .then(function(tweets) {
                 res.send(tweets);
+            })
+            .catch(err => {
+                res.send(err);
             });
-        }    
-    };
+        },
+    }
 
-    return TweetController;
+    return TweetsController;
 };

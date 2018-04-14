@@ -1,14 +1,12 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-module.exports = function(app) {
-
-    let TweetSchema = new Schema({
-        lat: String,
-        lon: String,
-        user: String,
-        text: String
+module.exports = function(sequelize, DataType) {
+    var Tweet = sequelize.define('tweet', {
+        lat: DataType.STRING,
+        lon: DataType.STRING,
+        userName: DataType.STRING,
+        text: DataType.STRING
+    }, {
+        tableName: 'tweet'
     });
 
-    return mongoose.model('Tweet', TweetSchema);
+    return Tweet;
 }
