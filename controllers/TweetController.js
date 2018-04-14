@@ -4,37 +4,38 @@ const winston = require('winston');
 module.exports = function(app) {
     let Tweet = app.models.schema.tweet;
 
-    let TweetsController = {
+    let TweetController = {
         index: function(req, res) {
             Tweet.findAll({})
             .then(function(tweets) {
                 winston.log('Success at getting all the tweets in the DB');
-                res.send(tweets);
+                res.status(200).json(tweets);
             })
             .catch(err => {
                 winston.error(err);
-                res.send(err);
+                res.json(err);
             });
         },
 
         create: function(req, res) {
             Tweet.create({
-                lat: req.lat || null,
-                lng: req.lng || null,
-                userName: req.userName || null,
-                text: req.text || null
+                lat: req.body.lat || null,
+                lng: req.body.lng || null,
+                userName: req.body.userName || null,
+                text: req.body.text || null,
+                categoryId: req.body.categoryId || null
             })
             .then(newTweet => {
                 winston.log('Created a new user');
-                res.send(newTweet);
+                res.status(200).json(newTweet);
             })
             .catch(err => {
                 winston.error(err);
-                res.send(err);
+                res.json(err);
             });
         },
 
-        create: function(tweet) {
+        addFromService: function(tweet) {
             Tweet.create({
                 lat: tweet.lat || null,
                 lng: tweet.lng || null,
@@ -47,8 +48,18 @@ module.exports = function(app) {
             .catch(err => {
                 winswton.error(err);
             });
+        },
+
+        indexFromCategory: function(req, res) {
+            Tweet.findAll({ where: { categoryId: req.params.categoryId } })
+                .then(tweets => {
+                    res.status(200).json(tweets);
+                })
+                .catch(err => {
+                    res.json(err);
+                })
         }
     }
 
-    return TweetsController;
+    return TweetController;
 };

@@ -41,7 +41,7 @@ module.exports = function () {
                     userName: response.data.user.screen_name || null,
                     text: response.data.text || null
                 };
-                TweetsController.create(newTweet);
+                TweetsController.addFromService(newTweet);
             }
         }).catch(function (error) {
             console.log(error);
