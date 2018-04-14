@@ -1,7 +1,8 @@
 const Axios = require('axios');
 const querystring = require('querystring');
-var TwitterStream = require('twitter-stream-api'),
-    fs = require('fs');
+const TwitterStream = require('twitter-stream-api');
+const fs = require('fs');
+const TweetsController = require('../controllers/TweetController')
 
 module.exports = function () {
     var keys = {
@@ -57,5 +58,5 @@ module.exports = function () {
         }
     });
 
-    Twitter.pipe(fs.createWriteStream('tweets.json'));
+    // Twitter.pipe(fs.createWriteStream('tweets.json'));
 };
