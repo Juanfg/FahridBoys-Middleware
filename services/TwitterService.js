@@ -3,8 +3,9 @@ const querystring = require('querystring');
 const TwitterStream = require('twitter-stream-api');
 const fs = require('fs');
 const TweetsController = require('../controllers/TweetController')
+const winston = require('winston');
 
-module.exports = function () {
+module.exports = function (app) {
     var keys = {
         consumer_key: "Pz6bjuLTg3iQnjQzPcIXhc3mP",
         consumer_secret: "tq0Q3xkXW6LAnT6Cyl844vIZCqV9UGLzeE6Q3Kh0YIQNrNzYcO",
@@ -54,9 +55,27 @@ module.exports = function () {
                     console.log(response.data);
                     var tweet = {
                         lat: response.data.lat,
-                        lng: response.data.lng
+                        lng: response.data.lon,
+                        categoryId: response.data.category
                     };
-                    TweetsController.addFromService(tweet);
+                    if (tweet.categoryId != 0) { 
+                        let Tweet = app.models.schema.tweet;
+                        Tweet.create({
+                            lat: tweet.lat || null,
+                            lng: tweet.lng || null,
+                            userName: tweet.userName || null,
+                            text: tweet.text || null,
+                            categoryId: tweet.categoryId
+                        })
+                        .then(newTweet => {
+                            winston.log('Created a new user');
+                        })
+                        .catch(err => {
+                            winston.error(err);
+                        });
+                    }
+
+
                 }).catch(function (error) {
                     console.log(error);
                 });

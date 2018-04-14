@@ -28,6 +28,6 @@ sequelize.sync().done(function () {
     })
 });
 
-// var tServiceInstance = new tService();
+var tServiceInstance = new tService(app);
 
 module.exports = app;
